@@ -12,26 +12,36 @@ def convert_to_array():
 def calcMode():
     mode_txt.delete(0, END)
     try:
+        mode_txt.config(state="normal")
         mode_txt.insert(0,statistics.mode(convert_to_array()))
+        mode_txt.config(state=DISABLED)
+
     except:
         mode_txt.insert(0,"there is no mode in this list")
 
 def calcMean():
     mean_txt.delete(0, END)
+    mean_txt.config(state="normal")
     mean_txt.insert(0,statistics.mean(convert_to_array()))
+    mean_txt.config(state=DISABLED)
 
 def calcMedian():
     median_txt.delete(0, END)
+    median_txt.config(state="normal")
     median_txt.insert(0,statistics.median(convert_to_array()))
+    median_txt.config(state=DISABLED)
 
 def calcvariance():
     variance_txt.delete(0, END)
+    variance_txt.config(state="normal")
     variance_txt.insert(0,statistics.variance(convert_to_array()))
+    variance_txt.config(state=DISABLED)
 
 def calc_standard_dev():
     standDev_txt.delete(0, END)
+    standDev_txt.config(state="normal")
     standDev_txt.insert(0, statistics.stdev(convert_to_array()))
-
+    standDev_txt.config(state=DISABLED)
 
 root = Tk()
 root.resizable(False,False)
@@ -50,13 +60,22 @@ variance_btn=Button(root,text= "    Variance    ",command=calcvariance)
 
 
 list_txt=Entry(root)
+
 mode_txt=Entry(root)
 mode_txt.config(state=DISABLED)
+
 median_txt=Entry(root)
-median_txt.config(state="normal")
+median_txt.config(state=DISABLED)
+
 mean_txt=Entry(root)
+mean_txt.config(state=DISABLED)
+
 standDev_txt=Entry(root)
+standDev_txt.config(state=DISABLED)
+
 variance_txt=Entry(root)
+variance_txt.config(state=DISABLED)
+
 
 
 list_lbl.grid(row=0,column=0)
