@@ -2,7 +2,7 @@ from lib2to3.fixes import fix_throw
 from tkinter import *
 import statistics
 import pandas as pd
-import numy as np
+import numpy as np
 import matplotlib.pyplot as plt
 
 def convert_to_array():
