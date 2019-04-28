@@ -1,6 +1,9 @@
 from lib2to3.fixes import fix_throw
 from tkinter import *
 import statistics
+import pandas as pd
+import numy as np
+import matplotlib.pyplot as plt
 
 def convert_to_array():
     List = list_txt.get().split()
@@ -95,5 +98,6 @@ standDev_btn.grid(row=5,column=0,pady=5)
 variance_btn.grid(row=5,column=1,pady=5)
 
 
+plt.hist([2,3,5,1,0,6,8])
 root.mainloop()
 
