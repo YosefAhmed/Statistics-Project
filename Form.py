@@ -63,8 +63,10 @@ def bar_charts():
         plt.show()
 
 def pie_charts():
-        plt.pie(convertX_to_array())
-        plt.title('Pie Charts')
+        plt.pie(collections.Counter(convertX_to_array()).values(), labels=collections.Counter(convertX_to_array()).keys(), startangle=90, shadow=True,
+                radius=1.2, autopct='%1.1f%%')
+        plt.legend()
+        plt.title('Pie Chart')
         plt.show()
 
 def scatter_plot():
