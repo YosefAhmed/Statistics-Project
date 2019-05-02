@@ -9,6 +9,9 @@ import numpy
 import matplotlib.pyplot as plt
 from pandas._libs.parsers import basestring
 
+#these 2 methods converts Y & X Entry to List of integers
+from pandas.io.sas.sas7bdat import _column
+
 
 def convertY_to_array():
     List = Y_txt.get().split()
@@ -22,46 +25,62 @@ def convertX_to_array():
     print(List)
     return List
 
+#this method clears all Entries
+def clear():
+    X_txt.delete(0, 'end')
+    Y_txt.delete(0, 'end')
+    mode_txt.delete(0, 'end')
+    median_txt.delete(0, 'end')
+    mean_txt.delete(0, 'end')
+    standDev_txt.delete(0, 'end')
+    variance_txt.delete(0, 'end')
 
+#=============== Mode Calculator =================
 def calcMode():
-    mode_txt.delete(0, END)
     try:
         mode_txt.config(state="normal")
+        mode_txt.delete(0, END)
         mode_txt.insert(0,statistics.mode(convertX_to_array()))
         mode_txt.config(state=DISABLED)
 
     except:
         mode_txt.insert(0,"there is no mode in this list")
 
+#=============== Mean Calculator =================
 def calcMean():
-    mean_txt.delete(0, END)
     mean_txt.config(state="normal")
+    mean_txt.delete(0, END)
     mean_txt.insert(0,statistics.mean(convertX_to_array()))
     mean_txt.config(state=DISABLED)
 
+#=============== Median Calculator =================
 def calcMedian():
-    median_txt.delete(0, END)
     median_txt.config(state="normal")
+    median_txt.delete(0, END)
     median_txt.insert(0,statistics.median(convertX_to_array()))
     median_txt.config(state=DISABLED)
 
+#=============== Variance Calculator =================
 def calcvariance():
-    variance_txt.delete(0, END)
     variance_txt.config(state="normal")
+    variance_txt.delete(0, END)
     variance_txt.insert(0,statistics.variance(convertX_to_array()))
     variance_txt.config(state=DISABLED)
 
+#=============== Stabdard Deviation Calculator =================
 def calc_standard_dev():
-    standDev_txt.delete(0, END)
     standDev_txt.config(state="normal")
+    standDev_txt.delete(0, END)
     standDev_txt.insert(0, statistics.stdev(convertX_to_array()))
     standDev_txt.config(state=DISABLED)
 
+#=============== Bar Chart Calculator =================
 def bar_charts():
         plt.bar(collections.Counter(convertX_to_array()).keys(), collections.Counter(convertX_to_array()).values(), width=0.8, color=['red', 'blue'])
         plt.title('Bar Charts')
         plt.show()
 
+#=============== Pie charts Calculator =================
 def pie_charts():
         plt.pie(collections.Counter(convertX_to_array()).values(), labels=collections.Counter(convertX_to_array()).keys(), startangle=90, shadow=True,
                 radius=1.2, autopct='%1.1f%%')
@@ -69,6 +88,7 @@ def pie_charts():
         plt.title('Pie Chart')
         plt.show()
 
+#=============== Scatter Plot Calculator =================
 def scatter_plot():
     if Y_txt.get()==""or X_txt.get()=="" or len(convertX_to_array()) != len(convertY_to_array()):
         print(" Enter 2 Lists with the same length ")
@@ -77,11 +97,14 @@ def scatter_plot():
         plt.title('Scatter Charts')
         plt.show()
 
-def dot_plot():
+#=============== dot Plot Calculator =================
+"""def dot_plot():
         plt.plot(convertX_to_array())
         plt.title('Dot Plot')
         plt.show()
+"""
 
+#=============== Histogram Calculator =================
 def histogram():
     if Y_txt.get() == "":
         bins = 1 + 3.3*math.log10(len(convertX_to_array()))
@@ -94,6 +117,7 @@ def histogram():
         plt.title('Histogram')
         plt.show()
 
+#=============== Box Plot Calculator =================
 def boxPlot():
     try:
         if X_txt.get() != "":
@@ -109,6 +133,8 @@ def boxPlot():
     except:
         messagebox.showinfo("Error", "Invalid list")
 
+
+#=============== Correlation Calculator =================
 def correlation():
   try :
       R=numpy.corrcoef(convertX_to_array(), convertY_to_array())[0,1]
@@ -136,6 +162,29 @@ def correlation():
   except :
       messagebox.showinfo("Error", "Enter 2 lists of numbers")
 
+#=============== Regression Calculator =================
+def regression():
+    try:
+        X = numpy.array(convertX_to_array())
+        Y = numpy.array(convertY_to_array())
+        n = numpy.size(X)
+        xmean = statistics.mean(convertX_to_array())
+        ymean = statistics.mean(convertY_to_array())
+        SS_xy = numpy.sum(Y * X - n * ymean * xmean)
+        SS_xx = numpy.sum(X * X - n * xmean * xmean)
+        b1 = SS_xy / SS_xx
+        b0 = ymean - b1 * xmean
+        plt.scatter(X, Y)
+        yPred = b0 + b1 * X
+        plt.plot(X, yPred, color="r")
+        plt.xlabel = ('x')
+        plt.ylabel = ('y')
+        plt.title('Line Regression')
+        plt.show()
+    except:
+        messagebox.showinfo("Error", "Enter 2 valid lists of numbers")
+
+#=================================================== Design ==================================
 
 root = Tk()
 root.resizable(False, False)
@@ -155,12 +204,14 @@ bar_btn = Button(root, text="  Bar Charts  ", command=bar_charts, bg='orange', f
 pie_btn = Button(root, text="  Pie Charts  ", command=pie_charts, bg='orange', fg='white')
 scutter_btn = Button(root, text="  Scatter Plot  ", command=scatter_plot, bg='orange', fg='white')
 
-dot_btn = Button(root, text="  Dot Plot  ", command=dot_plot, bg='orange', fg='white')
+#dot_btn = Button(root, text="  Dot Plot  ", command=dot_plot, bg='orange', fg='white')
 hist_btn = Button(root, text="  Histogram  ", command=histogram, bg='orange', fg='white')
 box_btn = Button(root, text="  Box Plot  ", bg='orange', fg='white',command=boxPlot)
 
 corrlation_btn = Button(root, text="  Correlation  ", bg='orange', fg='white', command=correlation)
-rgresion_btn = Button(root, text="  Regression  ", bg='orange', fg='white')
+rgresion_btn = Button(root, text="  Regression  ", bg='orange', fg='white', command=regression)
+
+clear_btn = Button(root, text="  Clear  ", command=clear, bg='light green', fg='dark green')
 
 X_txt = Entry(root,text="")
 Y_txt = Entry(root,text="")
@@ -210,32 +261,14 @@ bar_btn.grid(row=6, column=0, padx=30, pady=50)
 pie_btn.grid(row=5, column=1,pady=50)
 scutter_btn.grid(row=6, column=2, padx=30,pady=50)
 
-dot_btn.grid(row=7, column=0)
+#dot_btn.grid(row=7, column=0)
 hist_btn.grid(row=6, column=1)
 box_btn.grid(row=7, column=2, padx=30)
 
 corrlation_btn.grid(row=7, column=1, pady=30)
-rgresion_btn.grid(row=8, column=1, pady=10)
+rgresion_btn.grid(row=7, column=0, pady=10)
 
-y = [1, 2, 3, 10, 12, 9, 3]
-x = [41, 60, 79, 98, 117, 136, 155]
-# 2 parameters required
-# plt.bar(x)
-# plt.show()
-# 1 parameter required
-# plt.pie(x)
+clear_btn.grid(row=8,column=1,pady=10)
 
-# frequency needed (Y axis)
-# plt.plot(y)
-
-# can take frequency(Y) and values(X)
-# plt.plot(x, y)
-y = [23,60,79,32,57,74,52,70,82,36,80,77,81,95,41,65,92,85,55,76,52,
-     10,64,75,78,25,80,98,81,67,41,71,83,54,64,72,88,62,74,43,60,
-     78,89,76,84,48,84,90,51,79,34,67,17,82,69,74,63,80,85,61]
-"""num_bins = 4
-x=[1,1,2,2,10,3,60,60]
-patches = plt.hist(x, num_bins,density=False, facecolor='blue', alpha=0.5)
-"""
 root.mainloop()
 
